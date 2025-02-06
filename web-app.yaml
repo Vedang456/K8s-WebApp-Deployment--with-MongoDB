@@ -44,9 +44,11 @@ kind: Service
 metadata:
   name: webapp-service
 spec:
+  type: NodePort 
   selector:
     app: webapp 
   ports:
     protocol: TCP
-    port: 3000  #Sets port of service
-    targetPort: 3000 #same as Containerport ,tell/forwards request to which port
+    port: 3000  
+    targetPort: 3000
+    nodePort: 30010
