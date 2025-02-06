@@ -4,48 +4,46 @@ metadata:
   name: mongo-deployment
   labels:
     app: mongo
-  spec:
-    replicas: 1
-    # tells the no of pods to be created
-    selector:
-      matchLabels:
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
         app: mongo
-    template: #Config of Pod within the deployment
-      metadata:
-        labels:
-          app: mongo
-      spec:
-        containers:
-        - name: mongodb 
-        image: mongo:5.0 
-        #The Docker image
-        ports:
-        - containerPort: 27017 
-        env:
-        - name: MONGO_INITDB_ROOT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: mongo-secret
-              key: mongo-user 
-        - name: MONGO_INITDB_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mongo-secret
-              key: mongo-password
-
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:5.0
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-user
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-password
 
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
   name: mongo-service
 spec:
   selector:
-    app: mongo 
+    app: mongo
   ports:
-    protocol: TCP
-    port: 27017  #Sets port of service
-    targetPort: 27017 #same as Containerport ,tell/forwards request to which port
+    - protocol: TCP
+      port: 27017  #Sets port of service
+      targetPort: 27017 #same as Containerport ,tell/forwards request to which port
 
 #servuce and deployment will find each other via label Mongo
 
