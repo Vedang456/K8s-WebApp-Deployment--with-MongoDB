@@ -21,6 +21,18 @@ metadata:
         #The Docker image
         ports:
         - containerPort: 27017 
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-user 
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password
+
 
 ---
 apiVersion: v1
@@ -32,7 +44,7 @@ spec:
     app: mongo 
   ports:
     protocol: TCP
-    port: 8080  #Sets port of service
+    port: 27017  #Sets port of service
     targetPort: 27017 #same as Containerport ,tell/forwards request to which port
 
 #servuce and deployment will find each other via label Mongo
